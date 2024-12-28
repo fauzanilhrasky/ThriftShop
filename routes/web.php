@@ -12,8 +12,8 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\ResetPassword;
-use App\Http\Controllers\ChangePassword;            
-            
+use App\Http\Controllers\ChangePassword;
+use App\Http\Controllers\ProductController;
 
 Route::get('/', function () {return redirect('/dashboard');})->middleware('auth');
 	Route::get('/register', [RegisterController::class, 'create'])->middleware('guest')->name('register');
@@ -35,4 +35,14 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/sign-up-static', [PageController::class, 'signup'])->name('sign-up-static'); 
 	Route::get('/{page}', [PageController::class, 'index'])->name('page');
 	Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+});
+
+
+Route::prefix('admin')->name('admin.')->group(function () {
+	Route::get('products',[ProductController::class, 'index'])->name('product.index');
+	Route::get('products/create',[ProductController::class, 'create'])->name('product.create');
+	Route::post('products',[ProductController::class, 'store'])->name('product.store');
+	Route::get('products/{product}/edit',[ProductController::class, 'edit'])->name('product.edit');
+	Route::put('products/{product}',[ProductController::class, 'update'])->name('product.update');
+	Route::delete('products/{product}',[ProductController::class, 'destroy'])->name('product.destroy');
 });
